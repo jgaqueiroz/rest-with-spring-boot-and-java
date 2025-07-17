@@ -1,7 +1,6 @@
 package br.com.effecta.rest_with_spring_boot_and_java.services;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
