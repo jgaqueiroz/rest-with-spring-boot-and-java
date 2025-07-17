@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ExceptionResponse;
-import br.com.effecta.rest_with_spring_boot_and_java.exceptions.UnsupportedMathOperationException;
+import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
@@ -20,9 +20,10 @@ public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler 
         return buildResponse(e, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(UnsupportedMathOperationException.class)
-    public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception e, HttpServletRequest request) {
-        return buildResponse(e, request, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleResourceNotFoundException(Exception e,
+            HttpServletRequest request) {
+        return buildResponse(e, request, HttpStatus.NOT_FOUND);
     }
 
     private ResponseEntity<ExceptionResponse> buildResponse(Exception e, HttpServletRequest request,
