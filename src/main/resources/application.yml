@@ -13,3 +13,6 @@ spring:
             hibernate:
         show-sql: false
         open-in-view: true
+logging:
+    level:
+       br.com.effecta: DEBUG 
