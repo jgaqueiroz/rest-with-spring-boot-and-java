@@ -18,7 +18,7 @@ import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
 import br.com.effecta.rest_with_spring_boot_and_java.services.PersonService;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 public class PersonController {
 
     @Autowired
