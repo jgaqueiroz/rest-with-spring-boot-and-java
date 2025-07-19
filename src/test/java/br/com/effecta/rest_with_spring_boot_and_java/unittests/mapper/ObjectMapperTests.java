@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.data.dto.v1.PersonDTO;
 import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
 import br.com.effecta.rest_with_spring_boot_and_java.unittests.mapper.mocks.MockPerson;
 

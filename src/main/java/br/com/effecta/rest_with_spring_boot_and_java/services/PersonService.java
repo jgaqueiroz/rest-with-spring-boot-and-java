@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.data.dto.v1.PersonDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.data.dto.v2.PersonDTOv2;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ResourceNotFoundException;
+import br.com.effecta.rest_with_spring_boot_and_java.mapper.custom.PersonMapper;
 import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
 import br.com.effecta.rest_with_spring_boot_and_java.repositories.PersonRepository;
 
@@ -22,6 +24,9 @@ public class PersonService {
 
     @Autowired
     private PersonRepository repository;
+
+    @Autowired
+    private PersonMapper converter;
 
     public List<PersonDTO> findAll() {
         logger.info("Finding all People!");
@@ -42,6 +47,13 @@ public class PersonService {
 
         var entity = parseObject(person, Person.class);
         return parseObject(repository.save(entity), PersonDTO.class);
+    }
+
+    public PersonDTOv2 createV2(PersonDTOv2 person) {
+        logger.info("Creating one Person V2!");
+
+        var entity = converter.DTOv2ToPerson(person);
+        return converter.PersonToDTOv2(repository.save(entity));
     }
 
     public PersonDTO update(Long id, PersonDTO person) {

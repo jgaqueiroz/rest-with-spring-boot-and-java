@@ -1,8 +1,9 @@
-package br.com.effecta.rest_with_spring_boot_and_java.data.dto;
+package br.com.effecta.rest_with_spring_boot_and_java.data.dto.v2;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class PersonDTO implements Serializable {
+public class PersonDTOv2 implements Serializable {
 
     private static final Long serialVersionUID = 1L;
 
@@ -11,8 +12,9 @@ public class PersonDTO implements Serializable {
     private String lastName;
     private String address;
     private String gender;
+    private Date birthDate;
 
-    public PersonDTO() {
+    public PersonDTOv2() {
     }
 
     public Long getId() {
@@ -55,6 +57,14 @@ public class PersonDTO implements Serializable {
         this.gender = gender;
     }
 
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -71,7 +81,7 @@ public class PersonDTO implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PersonDTO other = (PersonDTO) obj;
+        PersonDTOv2 other = (PersonDTOv2) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
