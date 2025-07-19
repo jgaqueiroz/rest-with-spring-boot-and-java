@@ -16,4 +16,4 @@ spring:
 logging:
     level:
         root: WARN
-        # br.com.effecta: DEBUG 
+        br.com.effecta: INFO

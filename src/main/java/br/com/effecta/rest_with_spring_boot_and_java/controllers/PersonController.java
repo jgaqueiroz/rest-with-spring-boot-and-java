@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
+import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
 import br.com.effecta.rest_with_spring_boot_and_java.services.PersonService;
 
 @RestController
@@ -25,22 +25,22 @@ public class PersonController {
     private PersonService service;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Person> findAll() {
+    public List<PersonDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable Long id) {
+    public PersonDTO findById(@PathVariable Long id) {
         return service.findById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person create(@RequestBody Person person) {
+    public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person update(@PathVariable Long id, @RequestBody Person person) {
+    public PersonDTO update(@PathVariable Long id, @RequestBody PersonDTO person) {
         return service.update(id, person);
     }
 
