@@ -1,6 +1,5 @@
 package br.com.effecta.rest_with_spring_boot_and_java.controllers;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,7 @@ public class PersonController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonDTO findById(@PathVariable Long id) {
-        var person = service.findById(id);
-        person.setLastName(null);
-        person.setBirthday(new Date());
-        person.setPhoneNumber("+55 81 98765-4321");
-        person.setSensitiveData("Foo bar!");
-        return person;
+        return service.findById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
