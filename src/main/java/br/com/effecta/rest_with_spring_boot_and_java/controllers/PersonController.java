@@ -33,7 +33,10 @@ public class PersonController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonDTO findById(@PathVariable Long id) {
         var person = service.findById(id);
+        person.setLastName(null);
         person.setBirthday(new Date());
+        person.setPhoneNumber("+55 81 98765-4321");
+        person.setSensitiveData("Foo bar!");
         return person;
     }
 
