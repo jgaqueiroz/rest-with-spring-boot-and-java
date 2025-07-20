@@ -1,6 +1,12 @@
 package br.com.effecta.rest_with_spring_boot_and_java.data.dto;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import br.com.effecta.rest_with_spring_boot_and_java.serializer.GenderSerializer;
 
 public class PersonDTO implements Serializable {
 
@@ -9,7 +15,12 @@ public class PersonDTO implements Serializable {
     private Long id;
     private String firstName;
     private String lastName;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date birthday;
     private String address;
+
+    @JsonSerialize(using = GenderSerializer.class)
     private String gender;
 
     public PersonDTO() {
@@ -39,6 +50,14 @@ public class PersonDTO implements Serializable {
         this.lastName = lastName;
     }
 
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -60,6 +79,11 @@ public class PersonDTO implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((birthday == null) ? 0 : birthday.hashCode());
+        result = prime * result + ((address == null) ? 0 : address.hashCode());
+        result = prime * result + ((gender == null) ? 0 : gender.hashCode());
         return result;
     }
 
@@ -76,6 +100,31 @@ public class PersonDTO implements Serializable {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
+            return false;
+        if (firstName == null) {
+            if (other.firstName != null)
+                return false;
+        } else if (!firstName.equals(other.firstName))
+            return false;
+        if (lastName == null) {
+            if (other.lastName != null)
+                return false;
+        } else if (!lastName.equals(other.lastName))
+            return false;
+        if (birthday == null) {
+            if (other.birthday != null)
+                return false;
+        } else if (!birthday.equals(other.birthday))
+            return false;
+        if (address == null) {
+            if (other.address != null)
+                return false;
+        } else if (!address.equals(other.address))
+            return false;
+        if (gender == null) {
+            if (other.gender != null)
+                return false;
+        } else if (!gender.equals(other.gender))
             return false;
         return true;
     }
