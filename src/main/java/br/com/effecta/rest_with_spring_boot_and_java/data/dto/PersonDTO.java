@@ -2,7 +2,9 @@ package br.com.effecta.rest_with_spring_boot_and_java.data.dto;
 
 import java.io.Serializable;
 
-public class PersonDTO implements Serializable {
+import org.springframework.hateoas.RepresentationModel;
+
+public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable {
 
     private static final Long serialVersionUID = 1L;
 

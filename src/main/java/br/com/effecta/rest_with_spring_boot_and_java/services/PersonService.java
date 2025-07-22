@@ -8,8 +8,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import org.springframework.stereotype.Service;
 
+import br.com.effecta.rest_with_spring_boot_and_java.controllers.PersonController;
 import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ResourceNotFoundException;
 import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
@@ -34,7 +38,9 @@ public class PersonService {
 
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found with ID: " + id));
-        return parseObject(entity, PersonDTO.class);
+        var dto = parseObject(entity, PersonDTO.class);
+        dto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel().withType("GET"));
+        return dto;
     }
 
     public PersonDTO create(PersonDTO person) {
