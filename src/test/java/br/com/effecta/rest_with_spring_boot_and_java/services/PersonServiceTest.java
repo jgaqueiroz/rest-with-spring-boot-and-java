@@ -10,6 +10,8 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
@@ -22,6 +24,7 @@ import java.util.Optional;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.exceptions.RequiredObjectIsNullException;
 import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
 import br.com.effecta.rest_with_spring_boot_and_java.repositories.PersonRepository;
 import br.com.effecta.rest_with_spring_boot_and_java.unittests.mapper.mocks.MockPerson;
@@ -156,6 +159,17 @@ public class PersonServiceTest {
     }
 
     @Test
+    void testCreateWithNullPerson() {
+        Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+            service.create(null);
+        });
+        
+        String expectedMessage = "It is not allowed to persist a null object";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
     void testUpdate() {
         Person person = input.mockEntity(1);
         Person persisted = person;
@@ -210,6 +224,17 @@ public class PersonServiceTest {
         assertEquals("First Name Test1", result.getFirstName());
         assertEquals("Last Name Test1", result.getLastName());
         assertEquals("Female", result.getGender());
+    }
+
+    @Test
+    void testUpdateWithNullPerson() {
+        Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+            service.update(1L, null);
+        });
+        
+        String expectedMessage = "It is not allowed to persist a null object";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
     }
     
     @Test

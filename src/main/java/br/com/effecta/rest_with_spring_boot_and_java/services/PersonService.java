@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.effecta.rest_with_spring_boot_and_java.controllers.PersonController;
 import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.exceptions.RequiredObjectIsNullException;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ResourceNotFoundException;
 import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
 import br.com.effecta.rest_with_spring_boot_and_java.repositories.PersonRepository;
@@ -46,6 +47,8 @@ public class PersonService {
     }
 
     public PersonDTO create(PersonDTO person) {
+        if (person == null) throw new RequiredObjectIsNullException();
+
         logger.info("Creating one Person!");
 
         var entity = parseObject(person, Person.class);
@@ -55,6 +58,8 @@ public class PersonService {
     }
 
     public PersonDTO update(Long id, PersonDTO person) {
+        if (person == null) throw new RequiredObjectIsNullException();
+        
         logger.info("Updating one Person!");
 
         Person entity = repository.findById(id)
