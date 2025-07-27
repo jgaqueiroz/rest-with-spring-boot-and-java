@@ -1,6 +1,7 @@
 package br.com.effecta.rest_with_spring_boot_and_java.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -24,7 +25,7 @@ public class Book implements Serializable {
     private String author;
 
     @Column(name = "launch_date", nullable = false)
-    private LocalDateTime launchDate;
+    private LocalDate launchDate;
 
     @Column(nullable = false)
     private Double price;
@@ -51,11 +52,11 @@ public class Book implements Serializable {
         this.author = author;
     }
 
-    public LocalDateTime getLaunchDate() {
+    public LocalDate getLaunchDate() {
         return launchDate;
     }
 
-    public void setLaunchDate(LocalDateTime launchDate) {
+    public void setLaunchDate(LocalDate launchDate) {
         this.launchDate = launchDate;
     }
 

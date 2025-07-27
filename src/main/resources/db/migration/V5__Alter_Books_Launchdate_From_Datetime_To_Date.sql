@@ -1,0 +1,2 @@
+ALTER TABLE books
+MODIFY COLUMN launch_date DATE;
