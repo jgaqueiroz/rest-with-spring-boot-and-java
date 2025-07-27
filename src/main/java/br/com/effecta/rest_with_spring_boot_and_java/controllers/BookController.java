@@ -14,19 +14,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.effecta.rest_with_spring_boot_and_java.controllers.docs.BookControllerDocs;
 import br.com.effecta.rest_with_spring_boot_and_java.data.dto.BookDTO;
-import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
 import br.com.effecta.rest_with_spring_boot_and_java.services.BookService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/book/v1")
 @Tag(name = "Books", description = "Endpoints for Managing Books")
-public class BookController {
+public class BookController implements BookControllerDocs {
 
     @Autowired
     private BookService service;
 
+    @Override
     @GetMapping(
         produces = { 
             MediaType.APPLICATION_JSON_VALUE, 
@@ -37,6 +38,7 @@ public class BookController {
         return service.findAll();
     }
 
+    @Override
     @GetMapping(value = "/{id}", 
         produces = { 
             MediaType.APPLICATION_JSON_VALUE, 
@@ -47,6 +49,7 @@ public class BookController {
         return service.findById(id);
     }
     
+    @Override
     @PostMapping(
         consumes = { 
             MediaType.APPLICATION_JSON_VALUE, 
@@ -62,6 +65,7 @@ public class BookController {
         return service.create(book);
     }
 
+    @Override
     @PutMapping(value = "/{id}", 
         consumes = { 
             MediaType.APPLICATION_JSON_VALUE, 
@@ -77,6 +81,7 @@ public class BookController {
         return service.update(id, book);
     }
 
+    @Override
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         service.delete(id);
