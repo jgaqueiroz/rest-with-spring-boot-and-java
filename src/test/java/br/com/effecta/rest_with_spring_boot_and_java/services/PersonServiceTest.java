@@ -98,7 +98,7 @@ public class PersonServiceTest {
         assertEquals("Last Name Test1", result.getLastName());
         assertEquals("Female", result.getGender());
     }
-    
+
     @Test
     void testCreate() {
         Person person = input.mockEntity(1);
@@ -107,10 +107,9 @@ public class PersonServiceTest {
 
         PersonDTO dto = input.mockDTO(1);
 
-        when(repository.findById(1L)).thenReturn(Optional.of(person));
         when(repository.save(person)).thenReturn(persisted);
         
-        var result = service.update(dto.getId(), dto);
+        var result = service.create(dto);
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -176,9 +175,10 @@ public class PersonServiceTest {
 
         PersonDTO dto = input.mockDTO(1);
 
+        when(repository.findById(1L)).thenReturn(Optional.of(person));
         when(repository.save(person)).thenReturn(persisted);
         
-        var result = service.create(dto);
+        var result = service.update(dto.getId(), dto);
 
         assertNotNull(result);
         assertNotNull(result.getId());
@@ -223,7 +223,7 @@ public class PersonServiceTest {
         assertEquals("First Name Test1", result.getFirstName());
         assertEquals("Last Name Test1", result.getLastName());
         assertEquals("Female", result.getGender());
-    }
+    }    
 
     @Test
     void testUpdateWithNullPerson() {
