@@ -40,7 +40,7 @@ public class PersonController implements PersonControllerDocs {
         return service.findAll();
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
+    //@CrossOrigin(origins = "http://localhost:8080")
     @Override
     @GetMapping(value = "/{id}", 
         produces = { 
@@ -52,7 +52,7 @@ public class PersonController implements PersonControllerDocs {
         return service.findById(id);
     }
 
-    @CrossOrigin(origins = {"http://localhost:8080", "https://effecta.com.br"})
+    //@CrossOrigin(origins = {"http://localhost:8080", "https://effecta.com.br"})
     @Override
     @PostMapping(
         consumes = { 
