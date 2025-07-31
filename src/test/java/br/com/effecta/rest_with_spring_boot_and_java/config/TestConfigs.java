@@ -8,4 +8,5 @@ public interface TestConfigs {
     
     String ORIGIN_EFFECTA = "https://effecta.com.br";
     String ORIGIN_PUBLISKO = "https://publisko.com";
+    String ORIGIN_LOCAL = "http://localhost:8080";
 }
