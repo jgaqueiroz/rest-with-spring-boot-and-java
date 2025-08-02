@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -89,6 +90,25 @@ public interface PersonControllerDocs {
         }
     )
     PersonDTO update(Long id, PersonDTO person);
+
+    @Operation(
+        summary = "Disable a Person",
+        description = "Disable a specific Person by your ID.",
+        tags = {"People"},
+        responses = {
+            @ApiResponse(
+                description = "Success", 
+                responseCode = "200", 
+                content = @Content(schema = @Schema(implementation = PersonDTO.class))
+            ),
+            @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+            @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+        }
+    )
+    PersonDTO disablePerson(@PathVariable Long id);
 
     @Operation(summary = "Deletes a Person",
         description = "Deletes a specific person by their ID.",

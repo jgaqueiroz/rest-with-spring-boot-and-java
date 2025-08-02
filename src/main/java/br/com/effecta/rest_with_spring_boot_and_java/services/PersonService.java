@@ -19,6 +19,7 @@ import br.com.effecta.rest_with_spring_boot_and_java.exceptions.RequiredObjectIs
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ResourceNotFoundException;
 import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
 import br.com.effecta.rest_with_spring_boot_and_java.repositories.PersonRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PersonService {
@@ -77,6 +78,19 @@ public class PersonService {
         return dto;
     }
 
+    @Transactional
+    public PersonDTO disablePerson(Long id) {
+        logger.info("Disabling one Person!");
+
+        findById(id);
+        repository.disablePerson(id);
+
+        var entity = repository.findById(id).get();
+        var dto = parseObject(entity, PersonDTO.class);
+        addHateoasLinks(dto);
+        return dto;
+    }
+
     public void delete(Long id) {
         logger.info("Deleting one Person!");
 
@@ -89,6 +103,7 @@ public class PersonService {
         dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PersonController.class).update(dto.getId(), dto)).withRel("update").withType("PUT"));
+        dto.add(linkTo(methodOn(PersonController.class).disablePerson(dto.getId())).withRel("disable").withType("PATCH"));
         dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
     }
 
