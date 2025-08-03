@@ -2,6 +2,7 @@ package br.com.effecta.rest_with_spring_boot_and_java.integrationtests.controlle
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -63,6 +64,7 @@ public class PersonControllerWithJsonTest extends AbstractIntegrationTest {
 			.post()
 		.then()
 			.statusCode(200)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
 		.extract()
 			.body()
 				.asString();
@@ -93,6 +95,7 @@ public class PersonControllerWithJsonTest extends AbstractIntegrationTest {
 			.put("{id}")
 		.then()
 			.statusCode(200)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
 		.extract()
 			.body()
 				.asString();
@@ -121,6 +124,7 @@ public class PersonControllerWithJsonTest extends AbstractIntegrationTest {
 			.get("{id}")
 		.then()
 			.statusCode(200)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
 		.extract()
 			.body()
 				.asString();
@@ -136,6 +140,50 @@ public class PersonControllerWithJsonTest extends AbstractIntegrationTest {
         assertEquals("Helsinki - Finland", createdPerson.getAddress());
         assertEquals("Male", createdPerson.getGender());
         assertTrue(createdPerson.getEnabled());
+    }
+
+    @Test
+    @Order(4)
+    void testDisable() throws JsonMappingException, JsonProcessingException {
+        
+        var content = given(specification)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .pathParam("id", person.getId())
+		.when()
+			.patch("{id}")
+		.then()
+			.statusCode(200)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+		.extract()
+			.body()
+				.asString();
+
+        PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+        person = createdPerson;
+
+        assertNotNull(createdPerson.getId());
+        assertTrue(createdPerson.getId() > 0);
+
+        assertEquals("Linus", createdPerson.getFirstName());
+        assertEquals("Benedict Torvalds", createdPerson.getLastName());
+        assertEquals("Helsinki - Finland", createdPerson.getAddress());
+        assertEquals("Male", createdPerson.getGender());
+        assertFalse(createdPerson.getEnabled());
+    }
+
+    @Test
+    @Order(4)
+    void testDelete() throws JsonMappingException, JsonProcessingException {
+        
+        given(specification)
+        .pathParam("id", person.getId())
+		.when()
+			.delete("{id}")
+		.then()
+			.statusCode(204)
+		.extract()
+			.body()
+				.asString();
     }
     
     @Test
