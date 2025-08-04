@@ -172,7 +172,7 @@ public class PersonControllerWithJsonTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void testDelete() throws JsonMappingException, JsonProcessingException {
         
         given(specification)
