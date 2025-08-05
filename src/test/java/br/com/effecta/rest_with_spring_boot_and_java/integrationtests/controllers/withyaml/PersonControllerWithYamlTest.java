@@ -26,7 +26,6 @@ import br.com.effecta.rest_with_spring_boot_and_java.config.TestConfigs;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.PersonDTO;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.config.DecoderConfig;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.log.LogDetail;
