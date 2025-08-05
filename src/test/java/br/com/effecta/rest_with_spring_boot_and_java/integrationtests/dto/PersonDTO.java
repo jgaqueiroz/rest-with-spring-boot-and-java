@@ -2,6 +2,12 @@ package br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto;
 
 import java.io.Serializable;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "Person")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PersonDTO implements Serializable {
 
     private static final Long serialVersionUID = 1L;
