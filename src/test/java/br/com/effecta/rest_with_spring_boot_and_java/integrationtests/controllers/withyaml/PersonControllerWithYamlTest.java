@@ -1,0 +1,252 @@
+package br.com.effecta.rest_with_spring_boot_and_java.integrationtests.controllers.withyaml;
+
+import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+
+import br.com.effecta.rest_with_spring_boot_and_java.config.TestConfigs;
+import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.PersonDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.testcontainers.AbstractIntegrationTest;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.config.DecoderConfig;
+import io.restassured.config.EncoderConfig;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class PersonControllerWithYamlTest extends AbstractIntegrationTest {
+
+    private static RequestSpecification specification;
+    private static YAMLMapper objectMapper;
+    private static PersonDTO person;
+
+    @BeforeAll
+    static void setup() {
+        objectMapper = new YAMLMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        person = new PersonDTO();
+    }
+
+    @Test
+    @Order(1)
+    void testCreate() throws JsonMappingException, JsonProcessingException {
+        mockPerson();
+
+        specification = new RequestSpecBuilder()
+            .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_EFFECTA)
+                .setBasePath("/api/person/v1")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+            .setConfig(RestAssuredConfig.config()
+                .encoderConfig(EncoderConfig.encoderConfig()
+                    .encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT)))
+            .build();
+
+        String requestYaml = objectMapper.writeValueAsString(person);
+        
+        var content = given(specification)
+        .contentType(MediaType.APPLICATION_YAML_VALUE)
+        .accept(MediaType.APPLICATION_YAML_VALUE)
+        .body(requestYaml)
+		.when()
+			.post()
+		.then()
+			.statusCode(200)
+            .contentType(MediaType.APPLICATION_YAML_VALUE)
+		.extract()
+			.body()
+				.asString();
+
+        PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+        person = createdPerson;
+		
+        assertNotNull(createdPerson.getId());
+        assertTrue(createdPerson.getId() > 0);
+
+        assertEquals("Linus", createdPerson.getFirstName());
+        assertEquals("Torvalds", createdPerson.getLastName());
+        assertEquals("Helsinki - Finland", createdPerson.getAddress());
+        assertEquals("Male", createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
+    }
+
+    @Test
+    @Order(2)
+    void testUpdate() throws JsonMappingException, JsonProcessingException {
+        person.setLastName("Benedict Torvalds");
+
+        String requestYaml = objectMapper.writeValueAsString(person);
+        
+        var content = given(specification)
+        .contentType(MediaType.APPLICATION_YAML_VALUE)
+        .accept(MediaType.APPLICATION_YAML_VALUE)
+        .pathParam("id", person.getId())
+        .body(requestYaml)
+		.when()
+			.put("{id}")
+		.then()
+			.statusCode(200)
+            .contentType(MediaType.APPLICATION_YAML_VALUE)
+		.extract()
+			.body()
+				.asString();
+
+        PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+        person = createdPerson;
+		
+        assertNotNull(createdPerson.getId());
+        assertTrue(createdPerson.getId() > 0);
+
+        assertEquals("Linus", createdPerson.getFirstName());
+        assertEquals("Benedict Torvalds", createdPerson.getLastName());
+        assertEquals("Helsinki - Finland", createdPerson.getAddress());
+        assertEquals("Male", createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
+    }
+    
+    @Test
+    @Order(3)
+    void testFindById() throws JsonMappingException, JsonProcessingException {
+        
+        var content = given(specification)
+        .accept(MediaType.APPLICATION_YAML_VALUE)
+        .pathParam("id", person.getId())
+		.when()
+			.get("{id}")
+		.then()
+			.statusCode(200)
+            .contentType(MediaType.APPLICATION_YAML_VALUE)
+		.extract()
+			.body()
+				.asString();
+
+        PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+        person = createdPerson;
+
+        assertNotNull(createdPerson.getId());
+        assertTrue(createdPerson.getId() > 0);
+
+        assertEquals("Linus", createdPerson.getFirstName());
+        assertEquals("Benedict Torvalds", createdPerson.getLastName());
+        assertEquals("Helsinki - Finland", createdPerson.getAddress());
+        assertEquals("Male", createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
+    }
+
+    @Test
+    @Order(4)
+    void testDisable() throws JsonMappingException, JsonProcessingException {
+        
+        var content = given(specification)
+        .accept(MediaType.APPLICATION_YAML_VALUE)
+        .pathParam("id", person.getId())
+		.when()
+			.patch("{id}")
+		.then()
+			.statusCode(200)
+            .contentType(MediaType.APPLICATION_YAML_VALUE)
+		.extract()
+			.body()
+				.asString();
+
+        PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
+        person = createdPerson;
+
+        assertNotNull(createdPerson.getId());
+        assertTrue(createdPerson.getId() > 0);
+
+        assertEquals("Linus", createdPerson.getFirstName());
+        assertEquals("Benedict Torvalds", createdPerson.getLastName());
+        assertEquals("Helsinki - Finland", createdPerson.getAddress());
+        assertEquals("Male", createdPerson.getGender());
+        assertFalse(createdPerson.getEnabled());
+    }
+
+    @Test
+    @Order(5)
+    void testDelete() throws JsonMappingException, JsonProcessingException {
+        
+        given(specification)
+        .pathParam("id", person.getId())
+		.when()
+			.delete("{id}")
+		.then()
+			.statusCode(204)
+		.extract()
+			.body()
+				.asString();
+    }
+    
+    @Test
+    @Order(6)
+    void testFindAll() throws JsonMappingException, JsonProcessingException {
+        
+        var content = given(specification)
+        .accept(MediaType.APPLICATION_YAML_VALUE)
+		.when()
+			.get()
+		.then()
+			.statusCode(200)
+            .contentType(MediaType.APPLICATION_YAML_VALUE)
+		.extract()
+			.body()
+				.asString();
+
+        List<PersonDTO> people = objectMapper.readValue(content,  new TypeReference<List<PersonDTO>>() {});
+
+        PersonDTO personOne = people.get(0);
+
+        assertNotNull(personOne.getId());
+        assertTrue(personOne.getId() > 0);
+
+        assertEquals("José", personOne.getFirstName());
+        assertEquals("Queiroz", personOne.getLastName());
+        assertEquals("Boa Viagem, Recife/PE", personOne.getAddress());
+        assertEquals("Male", personOne.getGender());
+        assertTrue(personOne.getEnabled());
+
+        PersonDTO PersonThree = people.get(2);
+
+        assertNotNull(PersonThree.getId());
+        assertTrue(PersonThree.getId() > 0);
+
+        assertEquals("Vania", PersonThree.getFirstName());
+        assertEquals("Albuquerque", PersonThree.getLastName());
+        assertEquals("Piedade, Jaboatão/PE", PersonThree.getAddress());
+        assertEquals("Female", PersonThree.getGender());
+        assertTrue(PersonThree.getEnabled());
+    }
+    
+    private void mockPerson() {
+        person.setFirstName("Linus");
+        person.setLastName("Torvalds");
+        person.setAddress("Helsinki - Finland");
+        person.setGender("Male");
+        person.setEnabled(true);
+    }
+}
