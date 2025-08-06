@@ -66,12 +66,10 @@ public class PersonControllerWithYamlTest extends AbstractIntegrationTest {
                     .encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT)))
             .build();
 
-        String requestYaml = objectMapper.writeValueAsString(person);
-        
         var content = given(specification)
         .contentType(MediaType.APPLICATION_YAML_VALUE)
         .accept(MediaType.APPLICATION_YAML_VALUE)
-        .body(requestYaml)
+        .body(objectMapper.writeValueAsString(person))
 		.when()
 			.post()
 		.then()
@@ -99,13 +97,11 @@ public class PersonControllerWithYamlTest extends AbstractIntegrationTest {
     void testUpdate() throws JsonMappingException, JsonProcessingException {
         person.setLastName("Benedict Torvalds");
 
-        String requestYaml = objectMapper.writeValueAsString(person);
-        
         var content = given(specification)
         .contentType(MediaType.APPLICATION_YAML_VALUE)
         .accept(MediaType.APPLICATION_YAML_VALUE)
         .pathParam("id", person.getId())
-        .body(requestYaml)
+        .body(objectMapper.writeValueAsString(person))
 		.when()
 			.put("{id}")
 		.then()
