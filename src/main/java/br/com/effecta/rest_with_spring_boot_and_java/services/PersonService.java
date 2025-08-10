@@ -1,6 +1,5 @@
 package br.com.effecta.rest_with_spring_boot_and_java.services;
 
-import static br.com.effecta.rest_with_spring_boot_and_java.mapper.ObjectMapper.parseListObjects;
 import static br.com.effecta.rest_with_spring_boot_and_java.mapper.ObjectMapper.parseObject;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -8,8 +7,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
 import br.com.effecta.rest_with_spring_boot_and_java.controllers.PersonController;
@@ -28,7 +31,10 @@ public class PersonService {
     @Autowired
     private PersonRepository repository;
 
-    public Page<PersonDTO> findAll(Pageable pageable) {
+    @Autowired
+    PagedResourcesAssembler<PersonDTO> assembler;
+
+    public PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable) {
         logger.info("Finding all People!");
 
         var people = repository.findAll(pageable);
@@ -39,7 +45,15 @@ public class PersonService {
             return dto;
         });
 
-        return peopleWithLinks;
+        Link findAllLink = WebMvcLinkBuilder.linkTo(
+            WebMvcLinkBuilder.methodOn(PersonController.class)
+                .findAll(
+                    pageable.getPageNumber(), 
+                    pageable.getPageSize(), 
+                    String.valueOf(pageable.getSort())))
+                .withSelfRel();
+
+        return assembler.toModel(peopleWithLinks, findAllLink);
     }
 
     public PersonDTO findById(Long id) {
