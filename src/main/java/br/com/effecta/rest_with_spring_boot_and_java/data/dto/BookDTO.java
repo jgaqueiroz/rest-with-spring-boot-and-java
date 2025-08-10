@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+@Relation(collectionRelation = "books")
 public class BookDTO extends RepresentationModel<BookDTO> implements Serializable {
 
     private static final Long serialVersionUID = 1L;
