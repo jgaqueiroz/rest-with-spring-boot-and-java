@@ -196,6 +196,7 @@ public class PersonControllerWithJsonTest extends AbstractIntegrationTest {
         
         var content = given(specification)
         .accept(MediaType.APPLICATION_JSON_VALUE)
+        .queryParams("page", 3, "size", 12, "direction", "asc")
 		.when()
 			.get()
 		.then()
@@ -213,22 +214,33 @@ public class PersonControllerWithJsonTest extends AbstractIntegrationTest {
         assertNotNull(personOne.getId());
         assertTrue(personOne.getId() > 0);
 
-        assertEquals("José", personOne.getFirstName());
-        assertEquals("Queiroz", personOne.getLastName());
-        assertEquals("Boa Viagem, Recife/PE", personOne.getAddress());
+        assertEquals("Alva", personOne.getFirstName());
+        assertEquals("Duberry", personOne.getLastName());
+        assertEquals("8460 Russell Park", personOne.getAddress());
         assertEquals("Male", personOne.getGender());
         assertTrue(personOne.getEnabled());
 
-        PersonDTO PersonThree = people.get(2);
+        PersonDTO personFive = people.get(4);
 
-        assertNotNull(PersonThree.getId());
-        assertTrue(PersonThree.getId() > 0);
+        assertNotNull(personFive.getId());
+        assertTrue(personFive.getId() > 0);
 
-        assertEquals("Vania", PersonThree.getFirstName());
-        assertEquals("Albuquerque", PersonThree.getLastName());
-        assertEquals("Piedade, Jaboatão/PE", PersonThree.getAddress());
-        assertEquals("Female", PersonThree.getGender());
-        assertTrue(PersonThree.getEnabled());
+        assertEquals("Amelina", personFive.getFirstName());
+        assertEquals("Masterson", personFive.getLastName());
+        assertEquals("4 Caliangt Point", personFive.getAddress());
+        assertEquals("Female", personFive.getGender());
+        assertFalse(personFive.getEnabled());
+
+        PersonDTO personEight = people.get(7);
+
+        assertNotNull(personEight.getId());
+        assertTrue(personEight.getId() > 0);
+
+        assertEquals("Anabelle", personEight.getFirstName());
+        assertEquals("Antyshev", personEight.getLastName());
+        assertEquals("46 Corscot Lane", personEight.getAddress());
+        assertEquals("Female", personEight.getGender());
+        assertTrue(personEight.getEnabled());
     }
     
     private void mockPerson() {
