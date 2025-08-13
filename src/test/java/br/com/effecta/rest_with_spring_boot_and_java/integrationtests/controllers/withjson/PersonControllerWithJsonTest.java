@@ -17,14 +17,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.effecta.rest_with_spring_boot_and_java.config.TestConfigs;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.PersonDTO;
-import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.WrapperPersonDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.json.WrapperPersonDTO;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;

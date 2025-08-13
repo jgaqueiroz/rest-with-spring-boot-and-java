@@ -1,4 +1,4 @@
-package br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers;
+package br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.json;
 
 import java.io.Serializable;
 
