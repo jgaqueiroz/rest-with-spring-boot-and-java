@@ -1,4 +1,4 @@
-package br.com.effecta.rest_with_spring_boot_and_java.integrationtests.controllers.withjson;
+package br.com.effecta.rest_with_spring_boot_and_java.integrationtests.controllers.withxml;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
@@ -20,14 +20,13 @@ import org.springframework.http.MediaType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.com.effecta.rest_with_spring_boot_and_java.config.TestConfigs;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.BookDTO;
-import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.json.WrapperBookDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.xml.PagedModelBook;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -39,15 +38,15 @@ import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BookControllerWithJsonTest extends AbstractIntegrationTest {
+public class BookControllerWithXmlTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
-    private static ObjectMapper objectMapper;
+    private static XmlMapper objectMapper;
     private static BookDTO book;
 
     @BeforeAll
     static void setup() {
-        objectMapper = JsonMapper.builder()
+        objectMapper = XmlMapper.builder()
         .addModule(new JavaTimeModule())
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         .build();
@@ -74,13 +73,14 @@ public class BookControllerWithJsonTest extends AbstractIntegrationTest {
             .build();
         
         var content = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-        .body(book)
+        .contentType(MediaType.APPLICATION_XML_VALUE)
+        .accept(MediaType.APPLICATION_XML_VALUE)
+        .body(objectMapper.writeValueAsString(book))
 		.when()
 			.post()
 		.then()
 			.statusCode(200)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .contentType(MediaType.APPLICATION_XML_VALUE)
 		.extract()
 			.body()
 				.asString();
@@ -103,14 +103,15 @@ public class BookControllerWithJsonTest extends AbstractIntegrationTest {
         book.setAuthor("Joanne Rowling");
         
         var content = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .contentType(MediaType.APPLICATION_XML_VALUE)
+        .accept(MediaType.APPLICATION_XML_VALUE)
         .pathParam("id", book.getId())
-        .body(book)
+        .body(objectMapper.writeValueAsString(book))
 		.when()
 			.put("{id}")
 		.then()
 			.statusCode(200)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .contentType(MediaType.APPLICATION_XML_VALUE)
 		.extract()
 			.body()
 				.asString();
@@ -132,13 +133,13 @@ public class BookControllerWithJsonTest extends AbstractIntegrationTest {
     void testFindById() throws JsonMappingException, JsonProcessingException {
         
         var content = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_XML_VALUE)
         .pathParam("id", book.getId())
 		.when()
 			.get("{id}")
 		.then()
 			.statusCode(200)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .contentType(MediaType.APPLICATION_XML_VALUE)
 		.extract()
 			.body()
 				.asString();
@@ -175,19 +176,19 @@ public class BookControllerWithJsonTest extends AbstractIntegrationTest {
     void testFindAll() throws JsonMappingException, JsonProcessingException {
         
         var content = given(specification)
-        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_XML_VALUE)
         .queryParams("page", 2, "size", 4, "direction", "asc")
 		.when()
 			.get()
 		.then()
 			.statusCode(200)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .contentType(MediaType.APPLICATION_XML_VALUE)
 		.extract()
 			.body()
 				.asString();
 
-        WrapperBookDTO wrapper = objectMapper.readValue(content,  WrapperBookDTO.class);
-        List<BookDTO> books = wrapper.getEmbedded().getBooks();
+        PagedModelBook wrapper = objectMapper.readValue(content,  PagedModelBook.class);
+        List<BookDTO> books = wrapper.getContent();
 
         BookDTO bookOne = books.get(0);
 
