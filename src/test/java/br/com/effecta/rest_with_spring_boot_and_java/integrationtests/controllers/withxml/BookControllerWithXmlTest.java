@@ -26,7 +26,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.com.effecta.rest_with_spring_boot_and_java.config.TestConfigs;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.BookDTO;
-import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.xml.PagedModelBook;
+import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.xml_and_yaml.PagedModelBook;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;

@@ -96,7 +96,7 @@ public class BookControllerCorsTest extends AbstractIntegrationTest {
         assertEquals("J. K. Rowling", createdBook.getAuthor());
         assertEquals("26/06/1997", createdBook.getLaunchDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         assertEquals(43.02, createdBook.getPrice(), 0.001);
-        assertEquals("Harry Potter e a Pedra Filosofal", createdBook.getTitle());
+        assertEquals("Zarry Potter e a Pedra Filosofal", createdBook.getTitle());
     }
     
     @Test
@@ -160,7 +160,7 @@ public class BookControllerCorsTest extends AbstractIntegrationTest {
         assertEquals("J. K. Rowling", createdBook.getAuthor());
         assertEquals("26/06/1997", createdBook.getLaunchDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         assertEquals(43.02, createdBook.getPrice(), 0.001);
-        assertEquals("Harry Potter e a Pedra Filosofal", createdBook.getTitle());
+        assertEquals("Zarry Potter e a Pedra Filosofal", createdBook.getTitle());
     }
     
     @Test
@@ -202,6 +202,6 @@ public class BookControllerCorsTest extends AbstractIntegrationTest {
         book.setAuthor("J. K. Rowling");
         book.setLaunchDate(LocalDate.parse("26/06/1997", DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         book.setPrice(43.02);
-        book.setTitle("Harry Potter e a Pedra Filosofal");
+        book.setTitle("Zarry Potter e a Pedra Filosofal");
     }
 }

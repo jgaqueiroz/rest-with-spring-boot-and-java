@@ -23,7 +23,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import br.com.effecta.rest_with_spring_boot_and_java.config.TestConfigs;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.PersonDTO;
-import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.xml.PagedModelPerson;
+import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto.wrappers.xml_and_yaml.PagedModelPerson;
 import br.com.effecta.rest_with_spring_boot_and_java.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
