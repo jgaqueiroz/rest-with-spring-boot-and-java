@@ -201,30 +201,30 @@ public class BookControllerWithYamlTest extends AbstractIntegrationTest {
         assertNotNull(bookOne.getId());
         assertTrue(bookOne.getId() > 0);
 
-        assertEquals("Brian Goetz e Tim Peierls", bookOne.getAuthor());
+        assertEquals("Eric Evans", bookOne.getAuthor());
         assertEquals("07/11/2017", bookOne.getLaunchDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        assertEquals(80.0, bookOne.getPrice(), 0.001);
-        assertEquals("Java Concurrency in Practice", bookOne.getTitle());
+        assertEquals(92.0, bookOne.getPrice(), 0.001);
+        assertEquals("Domain Driven Design", bookOne.getTitle());
 
         BookDTO bookTwo = books.get(1);
 
         assertNotNull(bookTwo.getId());
         assertTrue(bookTwo.getId() > 0);
 
-        assertEquals("Crockford", bookTwo.getAuthor());
+        assertEquals("Roger S. Pressman", bookTwo.getAuthor());
         assertEquals("07/11/2017", bookTwo.getLaunchDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        assertEquals(67.0, bookTwo.getPrice(), 0.001);
-        assertEquals("JavaScript", bookTwo.getTitle());
+        assertEquals(56.0, bookTwo.getPrice(), 0.001);
+        assertEquals("Engenharia de Software: uma abordagem profissional", bookTwo.getTitle());
 
         BookDTO bookFour = books.get(3);
 
         assertNotNull(bookFour.getId());
         assertTrue(bookFour.getId() > 0);
 
-        assertEquals("Richard Hunter e George Westerman", bookFour.getAuthor());
+        assertEquals("Aguinaldo Aragon Fernandes e Vladimir Ferraz de Abreu", bookFour.getAuthor());
         assertEquals("07/11/2017", bookFour.getLaunchDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        assertEquals(95.0, bookFour.getPrice(), 0.001);
-        assertEquals("O verdadeiro valor de TI", bookFour.getTitle());
+        assertEquals(54.0, bookFour.getPrice(), 0.001);
+        assertEquals("Implantando a governança de TI", bookFour.getTitle());
     }
     
     private void mockBook() {

@@ -215,31 +215,31 @@ public class PersonControllerWithXmlTest extends AbstractIntegrationTest {
         assertNotNull(personOne.getId());
         assertTrue(personOne.getId() > 0);
 
-        assertEquals("Alva", personOne.getFirstName());
-        assertEquals("Duberry", personOne.getLastName());
-        assertEquals("8460 Russell Park", personOne.getAddress());
+        assertEquals("Alex", personOne.getFirstName());
+        assertEquals("Brewood", personOne.getLastName());
+        assertEquals("0 Orin Pass", personOne.getAddress());
         assertEquals("Male", personOne.getGender());
-        assertTrue(personOne.getEnabled());
+        assertFalse(personOne.getEnabled());
 
         PersonDTO personFive = people.get(4);
 
         assertNotNull(personFive.getId());
         assertTrue(personFive.getId() > 0);
 
-        assertEquals("Amelina", personFive.getFirstName());
-        assertEquals("Masterson", personFive.getLastName());
-        assertEquals("4 Caliangt Point", personFive.getAddress());
+        assertEquals("Aliza", personFive.getFirstName());
+        assertEquals("Pringell", personFive.getLastName());
+        assertEquals("62 4th Place", personFive.getAddress());
         assertEquals("Female", personFive.getGender());
-        assertFalse(personFive.getEnabled());
+        assertTrue(personFive.getEnabled());
 
         PersonDTO personEight = people.get(7);
 
         assertNotNull(personEight.getId());
         assertTrue(personEight.getId() > 0);
 
-        assertEquals("Anabelle", personEight.getFirstName());
-        assertEquals("Antyshev", personEight.getLastName());
-        assertEquals("46 Corscot Lane", personEight.getAddress());
+        assertEquals("Allissa", personEight.getFirstName());
+        assertEquals("Millard", personEight.getLastName());
+        assertEquals("43 Green Avenue", personEight.getAddress());
         assertEquals("Female", personEight.getGender());
         assertTrue(personEight.getEnabled());
     }
@@ -269,9 +269,9 @@ public class PersonControllerWithXmlTest extends AbstractIntegrationTest {
         assertNotNull(personOne.getId());
         assertTrue(personOne.getId() > 0);
 
-        assertEquals("Candis", personOne.getFirstName());
-        assertEquals("Brayford", personOne.getLastName());
-        assertEquals("45019 Larry Drive", personOne.getAddress());
+        assertEquals("Brande", personOne.getFirstName());
+        assertEquals("Aiken", personOne.getLastName());
+        assertEquals("3 Toban Lane", personOne.getAddress());
         assertEquals("Female", personOne.getGender());
         assertTrue(personOne.getEnabled());
 
@@ -280,21 +280,21 @@ public class PersonControllerWithXmlTest extends AbstractIntegrationTest {
         assertNotNull(personTwo.getId());
         assertTrue(personTwo.getId() > 0);
 
-        assertEquals("Cleveland", personTwo.getFirstName());
-        assertEquals("Abramamovh", personTwo.getLastName());
-        assertEquals("97 Aberg Junction", personTwo.getAddress());
-        assertEquals("Male", personTwo.getGender());
-        assertTrue(personTwo.getEnabled());
+        assertEquals("Brandise", personTwo.getFirstName());
+        assertEquals("Stockey", personTwo.getLastName());
+        assertEquals("26 Crescent Oaks Street", personTwo.getAddress());
+        assertEquals("Female", personTwo.getGender());
+        assertFalse(personTwo.getEnabled());
 
         PersonDTO personThree = people.get(2);
 
         assertNotNull(personThree.getId());
         assertTrue(personThree.getId() > 0);
 
-        assertEquals("Ferdinand", personThree.getFirstName());
-        assertEquals("Di Batista", personThree.getLastName());
-        assertEquals("9786 La Follette Point", personThree.getAddress());
-        assertEquals("Male", personThree.getGender());
+        assertEquals("Candida", personThree.getFirstName());
+        assertEquals("McKeever", personThree.getLastName());
+        assertEquals("72 Dennis Pass", personThree.getAddress());
+        assertEquals("Female", personThree.getGender());
         assertFalse(personThree.getEnabled());
     }
     

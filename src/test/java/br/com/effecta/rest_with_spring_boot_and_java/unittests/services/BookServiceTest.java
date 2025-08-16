@@ -71,7 +71,7 @@ public class BookServiceTest {
 
         assert(result.getLinks().stream()
             .anyMatch(link -> link.getRel().value().equals("findAll")
-            && link.getHref().endsWith("/api/book/v1")
+            && link.getHref().endsWith("/api/book/v1?page=1&size=12&direction=asc")
             && link.getType().equals("GET")
             )
         );
@@ -128,7 +128,7 @@ public class BookServiceTest {
 
         assert(result.getLinks().stream()
             .anyMatch(link -> link.getRel().value().equals("findAll")
-            && link.getHref().endsWith("/api/book/v1")
+            && link.getHref().endsWith("/api/book/v1?page=1&size=12&direction=asc")
             && link.getType().equals("GET")
             )
         );
@@ -197,7 +197,7 @@ public class BookServiceTest {
 
         assert(result.getLinks().stream()
             .anyMatch(link -> link.getRel().value().equals("findAll")
-            && link.getHref().endsWith("/api/book/v1")
+            && link.getHref().endsWith("/api/book/v1?page=1&size=12&direction=asc")
             && link.getType().equals("GET")
             )
         );

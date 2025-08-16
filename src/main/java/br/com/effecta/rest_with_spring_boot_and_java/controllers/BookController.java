@@ -40,12 +40,12 @@ public class BookController implements BookControllerDocs {
             MediaType.APPLICATION_YAML_VALUE 
         })
     public ResponseEntity<PagedModel<EntityModel<BookDTO>>> findAll(
-        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "page", defaultValue = "1") Integer page,
         @RequestParam(value = "size", defaultValue = "12") Integer size,
         @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sortDirection, "title"));
         return ResponseEntity.ok(service.findAll(pageable));
     }
 

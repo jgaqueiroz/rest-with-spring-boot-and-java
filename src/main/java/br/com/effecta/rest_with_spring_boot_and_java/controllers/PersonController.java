@@ -43,12 +43,12 @@ public class PersonController implements PersonControllerDocs {
             MediaType.APPLICATION_YAML_VALUE 
         })
     public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(
-        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "page", defaultValue = "1") Integer page,
         @RequestParam(value = "size", defaultValue = "12") Integer size,
         @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sortDirection, "firstName"));
         return ResponseEntity.ok(service.findAll(pageable));
     }
     
@@ -62,12 +62,12 @@ public class PersonController implements PersonControllerDocs {
         })
     public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findByName(
         @PathVariable("firstName") String firstName,
-        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "page", defaultValue = "1") Integer page,
         @RequestParam(value = "size", defaultValue = "12") Integer size,
         @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sortDirection, "firstName"));
         return ResponseEntity.ok(service.findByName(firstName, pageable));
     }
 
