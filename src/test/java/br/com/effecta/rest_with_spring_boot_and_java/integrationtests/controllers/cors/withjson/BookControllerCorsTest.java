@@ -188,16 +188,6 @@ public class BookControllerCorsTest extends AbstractIntegrationTest {
         assertEquals("Invalid CORS request", content);
     }
     
-    @Test
-    void testUpdate() {
-        
-    }
-    
-    @Test
-    void testFindAll() {
-        
-    }
-    
     private void mockBook() {
         book.setAuthor("J. K. Rowling");
         book.setLaunchDate(LocalDate.parse("26/06/1997", DateTimeFormatter.ofPattern("dd/MM/yyyy")));

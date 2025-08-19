@@ -175,16 +175,6 @@ public class PersonControllerCorsTest extends AbstractIntegrationTest {
         assertEquals("Invalid CORS request", content);
     }
     
-    @Test
-    void testUpdate() {
-        
-    }
-    
-    @Test
-    void testFindAll() {
-        
-    }
-    
     private void mockPerson() {
         person.setFirstName("Richard");
         person.setLastName("Stallman");
