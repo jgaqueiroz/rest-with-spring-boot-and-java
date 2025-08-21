@@ -2,7 +2,7 @@ package br.com.effecta.rest_with_spring_boot_and_java.data.dto;
 
 import java.io.Serializable;
 
-public class UploadFIleResponseDTO implements Serializable {
+public class UploadFileResponseDTO implements Serializable {
 
     private static final Long serialVersionUID = 1L;
 
@@ -11,10 +11,10 @@ public class UploadFIleResponseDTO implements Serializable {
     private String fileType;
     private long size;
     
-    public UploadFIleResponseDTO() {
+    public UploadFileResponseDTO() {
     }
 
-    public UploadFIleResponseDTO(
+    public UploadFileResponseDTO(
             String fileName, 
             String fileDownloadUri, 
             String fileType, 
@@ -80,7 +80,7 @@ public class UploadFIleResponseDTO implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        UploadFIleResponseDTO other = (UploadFIleResponseDTO) obj;
+        UploadFileResponseDTO other = (UploadFileResponseDTO) obj;
         if (fileName == null) {
             if (other.fileName != null)
                 return false;
