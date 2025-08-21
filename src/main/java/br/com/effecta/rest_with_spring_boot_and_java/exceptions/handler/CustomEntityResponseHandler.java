@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ExceptionResponse;
+import br.com.effecta.rest_with_spring_boot_and_java.exceptions.FileNotFoundException;
+import br.com.effecta.rest_with_spring_boot_and_java.exceptions.FileStorageException;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.RequiredObjectIsNullException;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +33,18 @@ public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler 
     public final ResponseEntity<ExceptionResponse> handleBadRequestException(Exception e,
             HttpServletRequest request) {
         return buildResponse(e, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleFileNotFoundException(Exception e,
+            HttpServletRequest request) {
+        return buildResponse(e, request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(FileStorageException.class)
+    public final ResponseEntity<ExceptionResponse> handleFileStorageException(Exception e,
+            HttpServletRequest request) {
+        return buildResponse(e, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private ResponseEntity<ExceptionResponse> buildResponse(Exception e, HttpServletRequest request,
