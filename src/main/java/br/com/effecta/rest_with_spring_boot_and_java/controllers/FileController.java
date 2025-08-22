@@ -1,6 +1,8 @@
 package br.com.effecta.rest_with_spring_boot_and_java.controllers;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +41,13 @@ public class FileController implements FileControllerDocs {
         return new UploadFileResponseDTO(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
+    @PostMapping("/uploadMultipleFiles")
     @Override
-    public List<UploadFileResponseDTO> uploadMultipleFiles(MultipartFile[] files) {
-        return null;
+    public List<UploadFileResponseDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+        return Arrays.asList(files)
+            .stream()
+            .map(file -> uploadFile(file))
+            .collect(Collectors.toList());
     }
 
     @Override
