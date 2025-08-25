@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class RequiredObjectIsNullException extends RuntimeException {
+public class BadRequestException extends RuntimeException {
 
-    public RequiredObjectIsNullException() {
-        super("It is not allowed to persist a null object");
+    public BadRequestException() {
+        super("Unsupported file extension!");
     }
 
-    public RequiredObjectIsNullException(String message) {
+    public BadRequestException(String message) {
         super(message);
     }
 
