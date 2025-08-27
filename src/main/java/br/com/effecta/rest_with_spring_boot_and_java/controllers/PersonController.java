@@ -1,5 +1,7 @@
 package br.com.effecta.rest_with_spring_boot_and_java.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.effecta.rest_with_spring_boot_and_java.controllers.docs.PersonControllerDocs;
 import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
@@ -98,6 +101,17 @@ public class PersonController implements PersonControllerDocs {
         })
     public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
+    }
+
+    @Override
+    @PostMapping(value = "/createWithFile",
+        produces = {
+            MediaType.APPLICATION_JSON_VALUE, 
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE 
+        })
+    public List<PersonDTO> createWithFile(@RequestParam("file") MultipartFile file) {
+        return service.createWithFile(file);
     }
 
     @Override

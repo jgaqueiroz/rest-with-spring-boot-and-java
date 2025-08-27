@@ -2,13 +2,13 @@ package br.com.effecta.rest_with_spring_boot_and_java.controllers.docs;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -108,6 +108,29 @@ public interface PersonControllerDocs {
         }
     )
     PersonDTO create(PersonDTO person);
+
+    @Operation(
+        summary = "Create People with File",
+        description = "Creates People with upload of XLSX or CSV",
+        tags = {"People"},
+        responses = {
+            @ApiResponse(
+                description = "Success", 
+                responseCode = "200", 
+                content = {
+                    @Content(
+                        mediaType = MediaType.APPLICATION_JSON_VALUE,
+                        array = @ArraySchema(schema = @Schema(implementation = PersonDTO.class))
+                    )
+                }),
+            @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+            @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+        }
+    )
+    List<PersonDTO> createWithFile(MultipartFile file);
 
     @Operation(summary = "Updates a person's information",
         description = "Updates a person's information by passing in a JSON, XML or YML representation of the updated person.",

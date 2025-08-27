@@ -83,7 +83,7 @@ public class PersonService {
         return dto;
     }
 
-    public List<PersonDTO> createWithFile(MultipartFile file) throws IOException {
+    public List<PersonDTO> createWithFile(MultipartFile file) {
         logger.info("Importing People from file!");
 
         if (file.isEmpty()) throw new BadRequestException("Please set a Valid file!");
