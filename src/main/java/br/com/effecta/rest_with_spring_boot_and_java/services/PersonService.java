@@ -4,6 +4,11 @@ import static br.com.effecta.rest_with_spring_boot_and_java.mapper.ObjectMapper.
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +20,16 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.effecta.rest_with_spring_boot_and_java.controllers.PersonController;
 import br.com.effecta.rest_with_spring_boot_and_java.data.dto.PersonDTO;
+import br.com.effecta.rest_with_spring_boot_and_java.exceptions.BadRequestException;
+import br.com.effecta.rest_with_spring_boot_and_java.exceptions.FileStorageException;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.RequiredObjectIsNullException;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ResourceNotFoundException;
+import br.com.effecta.rest_with_spring_boot_and_java.file.importer.contract.FileImporter;
+import br.com.effecta.rest_with_spring_boot_and_java.file.importer.factory.FileImporterFactory;
 import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
 import br.com.effecta.rest_with_spring_boot_and_java.repositories.PersonRepository;
 import jakarta.transaction.Transactional;
@@ -31,6 +41,9 @@ public class PersonService {
 
     @Autowired
     private PersonRepository repository;
+    
+    @Autowired
+    private FileImporterFactory importer;
 
     @Autowired
     PagedResourcesAssembler<PersonDTO> assembler;
@@ -68,6 +81,31 @@ public class PersonService {
         var dto = parseObject(repository.save(entity), PersonDTO.class);
         addHateoasLinks(dto);
         return dto;
+    }
+
+    public List<PersonDTO> createWithFile(MultipartFile file) throws IOException {
+        logger.info("Importing People from file!");
+
+        if (file.isEmpty()) throw new BadRequestException("Please set a Valid file!");
+
+        try (InputStream inputStream = file.getInputStream()) {
+            String fileName = Optional.ofNullable(file.getOriginalFilename())
+                .orElseThrow(() -> new BadRequestException("File name cannot be null"));
+            FileImporter importer = this.importer.getImporter(fileName);
+
+            List<Person> entities = importer.importFile(inputStream).stream()
+                .map(dto -> repository.save(parseObject(dto, Person.class)))
+                .toList();
+
+            return entities.stream()
+                .map(entity -> {
+                    var dto = parseObject(entity, PersonDTO.class);
+                    addHateoasLinks(dto);
+                    return dto;
+                }).toList();
+        } catch (Exception e) {
+            throw new FileStorageException("Error processing the file! ");
+        }
     }
 
     public PersonDTO update(Long id, PersonDTO person) {
