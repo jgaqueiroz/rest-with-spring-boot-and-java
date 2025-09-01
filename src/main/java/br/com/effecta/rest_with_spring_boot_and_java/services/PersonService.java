@@ -4,7 +4,6 @@ import static br.com.effecta.rest_with_spring_boot_and_java.mapper.ObjectMapper.
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +11,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -28,6 +28,9 @@ import br.com.effecta.rest_with_spring_boot_and_java.exceptions.BadRequestExcept
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.FileStorageException;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.RequiredObjectIsNullException;
 import br.com.effecta.rest_with_spring_boot_and_java.exceptions.ResourceNotFoundException;
+import br.com.effecta.rest_with_spring_boot_and_java.file.exporter.MediaTypes;
+import br.com.effecta.rest_with_spring_boot_and_java.file.exporter.contract.FileExporter;
+import br.com.effecta.rest_with_spring_boot_and_java.file.exporter.factory.FileExporterFactory;
 import br.com.effecta.rest_with_spring_boot_and_java.file.importer.contract.FileImporter;
 import br.com.effecta.rest_with_spring_boot_and_java.file.importer.factory.FileImporterFactory;
 import br.com.effecta.rest_with_spring_boot_and_java.model.Person;
@@ -44,6 +47,9 @@ public class PersonService {
     
     @Autowired
     private FileImporterFactory importer;
+    
+    @Autowired
+    private FileExporterFactory exporter;
 
     @Autowired
     PagedResourcesAssembler<PersonDTO> assembler;
@@ -70,6 +76,21 @@ public class PersonService {
         var dto = parseObject(entity, PersonDTO.class);
         addHateoasLinks(dto);
         return dto;
+    }
+
+    public Resource exportPage(Pageable pageable, String acceptHeader) {
+        logger.info("Exporting a People page!");
+
+        var people = repository.findAll(pageable)
+            .map(person -> parseObject(person, PersonDTO.class))
+            .getContent();
+
+        try {
+            FileExporter exporter = this.exporter.getExporter(acceptHeader);
+            return exporter.exportFile(people);
+        } catch (Exception e) {
+            throw new RuntimeException("Error during file export!", e);
+        }
     }
 
     public PersonDTO create(PersonDTO person) {
@@ -172,6 +193,9 @@ public class PersonService {
         dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PersonController.class)).slash("createWithFile").withRel("createWithFile").withType("POST"));
+        /* Lacks Controller integration
+        dto.add(linkTo(methodOn(PersonController.class).exportPage(1, 12, "asc", MediaTypes.APPLICATION_XLSX_VALUE)).withRel("exportPage").withType("GET"));
+        */
         dto.add(linkTo(methodOn(PersonController.class).update(dto.getId(), dto)).withRel("update").withType("PUT"));
         dto.add(linkTo(methodOn(PersonController.class).disablePerson(dto.getId())).withRel("disable").withType("PATCH"));
         dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
