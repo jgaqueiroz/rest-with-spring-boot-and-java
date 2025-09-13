@@ -1,6 +1,7 @@
 package br.com.effecta.rest_with_spring_boot_and_java.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -60,10 +61,11 @@ public class PersonController implements PersonControllerDocs {
     }
 
     @Override
-    @GetMapping(value = "exportPage",
+    @GetMapping(value = "/exportPage",
         produces = { 
             MediaTypes.APPLICATION_XLSX_VALUE, 
-            MediaTypes.APPLICATION_CSV_VALUE 
+            MediaTypes.APPLICATION_CSV_VALUE,
+            MediaTypes.APPLICATION_PDF_VALUE 
         })
     public ResponseEntity<Resource> exportPage(
         @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -77,9 +79,15 @@ public class PersonController implements PersonControllerDocs {
         String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
 
         Resource file = service.exportPage(pageable, acceptHeader);
+
+        Map<String, String> extensioMap = Map.of(
+            MediaTypes.APPLICATION_XLSX_VALUE, ".xlsx",
+            MediaTypes.APPLICATION_CSV_VALUE, ".csv",
+            MediaTypes.APPLICATION_PDF_VALUE, ".pdf"
+        );
         
+        var fileExtension = extensioMap.getOrDefault(acceptHeader, "");
         String contentType = acceptHeader != null ? acceptHeader : "application/octet-stream";
-        var fileExtension = MediaTypes.APPLICATION_XLSX_VALUE.equalsIgnoreCase(acceptHeader) ? ".xlsx" : ".csv";
         var fileName = "people_exported" + fileExtension;
 
         return ResponseEntity.ok()

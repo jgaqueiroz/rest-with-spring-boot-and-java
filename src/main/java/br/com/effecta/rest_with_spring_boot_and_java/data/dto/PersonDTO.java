@@ -68,6 +68,11 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.enabled = enabled;
     }
 
+    public String getName() {
+        return (firstName != null ? firstName : "") +
+            (lastName != null ? " " + lastName : "");
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
