@@ -1,9 +1,14 @@
 package br.com.effecta.rest_with_spring_boot_and_java.data.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.effecta.rest_with_spring_boot_and_java.model.Book;
 
 @Relation(collectionRelation = "people")
 public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable {
@@ -16,6 +21,11 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     private String address;
     private String gender;
     private Boolean enabled;
+    private String profileUrl;
+    private String photoUrl;
+    
+    @JsonIgnore
+    private List<Book> books;
 
     public PersonDTO() {
     }
@@ -68,9 +78,34 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.enabled = enabled;
     }
 
+    @JsonIgnore
     public String getName() {
         return (firstName != null ? firstName : "") +
             (lastName != null ? " " + lastName : "");
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 
     @Override
@@ -83,6 +118,9 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((gender == null) ? 0 : gender.hashCode());
         result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
+        result = prime * result + ((profileUrl == null) ? 0 : profileUrl.hashCode());
+        result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
+        result = prime * result + ((books == null) ? 0 : books.hashCode());
         return result;
     }
 
@@ -124,6 +162,21 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
             if (other.enabled != null)
                 return false;
         } else if (!enabled.equals(other.enabled))
+            return false;
+        if (profileUrl == null) {
+            if (other.profileUrl != null)
+                return false;
+        } else if (!profileUrl.equals(other.profileUrl))
+            return false;
+        if (photoUrl == null) {
+            if (other.photoUrl != null)
+                return false;
+        } else if (!photoUrl.equals(other.photoUrl))
+            return false;
+        if (books == null) {
+            if (other.books != null)
+                return false;
+        } else if (!books.equals(other.books))
             return false;
         return true;
     }

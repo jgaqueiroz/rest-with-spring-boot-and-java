@@ -1,7 +1,9 @@
 package br.com.effecta.rest_with_spring_boot_and_java.integrationtests.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
+import br.com.effecta.rest_with_spring_boot_and_java.model.Book;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -15,6 +17,9 @@ public class PersonDTO implements Serializable {
     private String address;
     private String gender;
     private Boolean enabled;
+    private String profileUrl;
+    private String photoUrl;
+    private List<Book> books;
 
     public PersonDTO() {
     }
@@ -67,6 +72,35 @@ public class PersonDTO implements Serializable {
         this.enabled = enabled;
     }
 
+    public String getName() {
+        return (firstName != null ? firstName : "") +
+            (lastName != null ? " " + lastName : "");
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -77,6 +111,9 @@ public class PersonDTO implements Serializable {
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((gender == null) ? 0 : gender.hashCode());
         result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
+        result = prime * result + ((profileUrl == null) ? 0 : profileUrl.hashCode());
+        result = prime * result + ((photoUrl == null) ? 0 : photoUrl.hashCode());
+        result = prime * result + ((books == null) ? 0 : books.hashCode());
         return result;
     }
 
@@ -118,6 +155,21 @@ public class PersonDTO implements Serializable {
             if (other.enabled != null)
                 return false;
         } else if (!enabled.equals(other.enabled))
+            return false;
+        if (profileUrl == null) {
+            if (other.profileUrl != null)
+                return false;
+        } else if (!profileUrl.equals(other.profileUrl))
+            return false;
+        if (photoUrl == null) {
+            if (other.photoUrl != null)
+                return false;
+        } else if (!photoUrl.equals(other.photoUrl))
+            return false;
+        if (books == null) {
+            if (other.books != null)
+                return false;
+        } else if (!books.equals(other.books))
             return false;
         return true;
     }
